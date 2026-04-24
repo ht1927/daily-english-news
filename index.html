@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily English News | 毎日の英語学習</title>
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --card: #ffffff;
+    --text: #2b2b2b;
+    --muted: #6b6b6b;
+    --accent: #c8553d;
+    --accent-soft: #f8e6dd;
+    --highlight: #fff3a3;
+    --border: #e8e4dc;
+    --success: #3d7a5a;
+    --blue: #3d5a8a;
+    --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 24px 16px 80px;
+  }
+  .container { max-width: 820px; margin: 0 auto; }
+  header {
+    text-align: center;
+    padding: 24px 0 32px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 32px;
+  }
+  .brand { font-size: 13px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; }
+  h1 {
+    font-size: 28px; font-weight: 700; letter-spacing: 0.02em;
+  }
+  .subtitle { color: var(--muted); font-size: 14px; margin-top: 6px; }
+  .date-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 16px; padding: 12px 16px;
+    background: var(--accent-soft); border-radius: 10px;
+    font-size: 14px;
+  }
+  .date-row strong { color: var(--accent); }
+  .level-badge {
+    background: var(--accent); color: white;
+    padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  }
+
+  /* Article cards */
+  .article {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .article-head {
+    padding: 20px 24px 14px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(to right, var(--accent-soft), transparent);
+  }
+  .category {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .article h2 {
+    font-size: 20px; font-weight: 700; line-height: 1.4;
+  }
+  .article h3-ja {
+    font-size: 14px; color: var(--muted); margin-top: 4px; display: block;
+  }
+  .source { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .source a { color: var(--muted); text-decoration: underline; }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: #faf8f3;
+  }
+  .tab {
+    flex: 1; padding: 12px 8px; text-align: center; cursor: pointer;
+    font-size: 13px; font-weight: 600; color: var(--muted);
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+  .tab:hover { background: rgba(0,0,0,0.02); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: var(--card);
+  }
+
+  .tab-content { display: none; padding: 22px 24px; }
+  .tab-content.active { display: block; }
+
+  /* English passage */
+  .passage {
+    font-size: 16px; line-height: 1.9;
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+  .passage .word {
+    background: var(--highlight);
+    padding: 1px 3px;
+    border-radius: 3px;
+    cursor: help;
+    border-bottom: 1px dotted #999;
+  }
+  .passage .expr {
+    background: #d7ebd8;
+    padding: 1px 3px;
+    border-radius: 3px;
+    cursor: help;
+    border-bottom: 1px dotted #999;
+  }
+
+  /* Vocabulary list */
+  .vocab-item, .expr-item {
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    background: #fcfbf7;
+    border-radius: 0 8px 8px 0;
+  }
+  .expr-item { border-left-color: var(--success); }
+  .vocab-word {
+    font-size: 17px; font-weight: 700; color: var(--accent);
+    font-family: Georgia, serif;
+  }
+  .expr-item .vocab-word { color: var(--success); }
+  .pos { font-size: 12px; color: var(--muted); margin-left: 8px; font-style: italic; }
+  .meaning { font-size: 15px; margin-top: 4px; font-weight: 500; }
+  .example { font-size: 13px; color: var(--muted); margin-top: 6px; font-style: italic; }
+  .example::before { content: "例: "; font-style: normal; color: var(--accent); font-weight: 600; }
+
+  /* Legend */
+  .legend {
+    display: flex; gap: 14px;
+    font-size: 12px; color: var(--muted);
+    padding: 10px 24px 0;
+  }
+  .legend-box {
+    display: inline-block; width: 14px; height: 14px; border-radius: 3px;
+    vertical-align: middle; margin-right: 4px;
+  }
+
+  footer {
+    text-align: center; padding: 40px 0 20px;
+    color: var(--muted); font-size: 12px;
+  }
+  .refresh-note {
+    background: var(--accent-soft);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--accent);
+    text-align: center;
+  }
+
+  /* Tooltip */
+  .tooltip {
+    position: absolute;
+    background: #333; color: white;
+    padding: 8px 12px; border-radius: 6px;
+    font-size: 13px; font-family: -apple-system, sans-serif;
+    max-width: 260px; z-index: 100;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    pointer-events: none;
+    display: none;
+  }
+
+  @media (max-width: 500px) {
+    h1 { font-size: 22px; }
+    .article h2 { font-size: 17px; }
+    .passage { font-size: 15px; }
+    .tab { font-size: 11px; padding: 10px 4px; }
+    .tab-content { padding: 18px 16px; }
+    .article-head { padding: 16px 18px 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="brand">Daily English News</div>
+  <h1>毎日の英語学習</h1>
+  <div class="subtitle">News summaries for intermediate learners · TOEIC 800 level</div>
+  <div class="date-row">
+    <span>📅 <strong id="today-date">2026年4月23日（木）</strong></span>
+    <span class="level-badge">TOEIC 800</span>
+  </div>
+</header>
+
+<!-- Article 1: Business -->
+<div class="article">
+  <div class="article-head">
+    <span class="category">Business · Economy</span>
+    <h2>South Korea's GDP Surges on AI Chip Demand</h2>
+    <span class="article h3-ja" style="display:block; color:var(--muted); font-size:14px; margin-top:4px;">韓国GDP、AI向け半導体需要で急成長</span>
+    <div class="source">Source: <a href="https://www.riotimesonline.com/global-economy-briefing-ceasefire-rally-uk-cpi-korea-gdp/" target="_blank">Rio Times — Global Economy Briefing, Apr 23 2026</a></div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="a1-read">📖 Read</div>
+    <div class="tab" data-tab="a1-vocab">📚 Vocab</div>
+    <div class="tab" data-tab="a1-expr">💡 Expressions</div>
+  </div>
+
+  <div class="legend">
+    <span><span class="legend-box" style="background:var(--highlight);"></span>重要単語</span>
+    <span><span class="legend-box" style="background:#d7ebd8;"></span>重要表現</span>
+  </div>
+
+  <div class="tab-content active" id="a1-read">
+    <div class="passage">
+      South Korea's economy has achieved its fastest growth in over five years, driven by <span class="word" data-def="急上昇する">soaring</span> semiconductor demand. According to quarterly data from the Bank of Korea, the country's GDP expanded significantly in the first quarter of 2026, <span class="word" data-def="上回る">outperforming</span> market expectations. The surge was primarily <span class="expr" data-def="〜によって後押しされた">fueled by</span> global demand for advanced chips used in artificial intelligence systems and data centers. Major manufacturers such as Samsung Electronics and SK Hynix have reported record exports, boosting industrial output across the nation. Economists <span class="expr" data-def="AをBに起因すると考える">attribute this momentum to</span> increased <span class="word" data-def="設備投資">capital expenditure</span> from tech giants worldwide investing in AI infrastructure. However, analysts caution that the growth remains <span class="expr" data-def="〜に大きく依存している">heavily dependent on</span> a single sector, which could <span class="word" data-def="リスクをもたらす">pose risks</span> if global chip demand slows. Despite concerns, the positive figures have <span class="expr" data-def="投資家の信頼を高めた">lifted investor confidence</span> and pushed the Korean won to a three-month high against the US dollar.
+    </div>
+  </div>
+
+  <div class="tab-content" id="a1-vocab">
+    <div class="vocab-item">
+      <span class="vocab-word">soaring</span><span class="pos">adj.</span>
+      <div class="meaning">急上昇する、急騰する</div>
+      <div class="example">Soaring energy prices are affecting everyone.（急騰するエネルギー価格は全員に影響を与えている）</div>
+    </div>
+    <div class="vocab-item">
+      <span class="vocab-word">outperform</span><span class="pos">v.</span>
+      <div class="meaning">（期待や他社を）上回る、好成績を残す</div>
+      <div class="example">The stock outperformed the market this quarter.（その株は今四半期、市場平均を上回った）</div>
+    </div>
+    <div class="vocab-item">
+      <span class="vocab-word">capital expenditure</span><span class="pos">n.</span>
+      <div class="meaning">設備投資（CAPEX）</div>
+      <div class="example">The firm increased its capital expenditure on AI.（同社はAIへの設備投資を増やした）</div>
+    </div>
+    <div class="vocab-item">
+      <span class="vocab-word">momentum</span><span class="pos">n.</span>
+      <div class="meaning">勢い、はずみ</div>
+      <div class="example">The recovery is gaining momentum.（回復が勢いを増している）</div>
+    </div>
+    <div class="vocab-item">
+      <span class="vocab-word">pose risks</span><span class="pos">v.phrase</span>
+      <div class="meaning">リスクをもたらす、危険をもたらす</div>
+      <div class="example">Tariffs could pose risks to global trade.（関税は世界貿易にリスクをもたらす可能性がある）</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="a1-expr">
+    <div class="expr-item">
+      <span class="vocab-word">fueled by ~</span>
+      <div class="meaning">〜によって後押しされる／駆り立てられる</div>
+      <div class="example">The rally was fueled by strong earnings.（強い決算によって株価上昇が後押しされた）</div>
+    </div>
+    <div class="expr-item">
+      <span class="vocab-word">attribute A to B</span>
+      <div class="meaning">AをBに起因すると考える、AをBのおかげ／せいにする</div>
+      <div class="example">She attributes her success to hard work.（彼女は自分の成功を努力のおかげだと考えている）</div>
+    </div>
+    <div class="expr-item">
+      <span class="vocab-word">heavily dependent on ~</span>
+      <div class="meaning">〜に大きく依存している</div>
+      <div class="example">Japan is heavily dependent on imported oil.（日本は輸入石油に大きく依存している）</div>
+    </div>
+    <div class="expr-item">
+      <span class="vocab-word">lift investor confidence</span>
+      <div class="meaning">投資家の信頼を高める（lift = 持ち上げる＝向上させる）</div>
+      <div class="example">Good earnings lifted investor confidence.（好決算が投資家の信頼を高めた）</div>
+    </div>
+  </div>
+</div>
+
+<!-- Article 2: Sauna -->
+<div class="article">
+  <div class="article-head">
+    <span class="category">Wellness · Sauna</span>
+    <h2>The Rise of "Social Saunas" and Sauna Tourism</h2>
+    <span style="display:block; color:var(--muted); font-size:14px; margin-top:4px;">「ソーシャルサウナ」とサウナツーリズムの興隆</span>
+    <div class="source">Source: <a href="https://globalwellnessinstitute.org/press-room/press-releases/global-wellness-summit-releases-10-wellness-trends-for-2026/" target="_blank">Global Wellness Summit — 10 Wellness Trends for 2026</a></div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="a2-read">📖 Read</div>
+    <div class="tab" data-tab="a2-vocab">📚 Vocab</div>
+    <div class="tab" data-tab="a2-expr">💡 Expressions</div>
+  </div>
+
+  <div class="legend">
+    <span><span class="legend-box" style="background:var(--highlight);"></span>重要単語</span>
+    <span><span class="legend-box" style="background:#d7ebd8;"></span>重要表現</span>
+  </div>
+
+  <div class="tab-content active" id="a2-read">
+    <div class="passage">
+      Sauna culture is <span class="word" data-def="経験している、〜を経ている">undergoing</span> a major transformation as "social saunas" <span class="expr" data-def="人気を得る">gain popularity</span> around the world. Unlike traditional saunas focused on endurance and extreme heat, these new venues prioritize relaxation, emotional <span class="word" data-def="幸福（感）、健康">well-being</span>, and community. According to industry analysts, the global sauna market is expected to exceed $1 billion by the mid-2020s, with the U.S. sector alone surpassing $200 million in annual revenue. Meanwhile, sauna tourism has <span class="word" data-def="出現した、生まれた">emerged</span> as a rapidly growing <span class="word" data-def="特化した分野、ニッチ市場">niche</span> within the wellness travel industry, currently valued at over $4 billion globally. Europe accounts for nearly half of this market and is <span class="expr" data-def="〜すると予測される">projected to grow</span> by 6-7% annually through the next decade. Finland, Estonia, and Japan remain top destinations for <span class="word" data-def="愛好家">enthusiasts</span> seeking authentic experiences. Innovations such as infrared heating and smart sensors are also <span class="word" data-def="作り変えている">reshaping</span> home saunas. Experts believe this <span class="expr" data-def="儀式的な、習慣に根ざした">ritual-based</span> approach to wellness will continue to <span class="word" data-def="繁栄する、栄える">thrive</span> as people prioritize mental reset over physical extremes.
+    </div>
+  </div>
+
+  <div class="tab-content" id="a2-vocab">
+    <div class="vocab-item">
+      <span class="vocab-word">undergo</span><span class="pos">v.</span>
+      <div class="meaning">（変化・経験を）経る、受ける</div>
+      <div class="example">The city is undergoing rapid change.（その都市は急速な変化を経ている）</div>
+    </div>
+    <div class="vocab-item">
+      <span class="vocab-word">well-being</span><span class="pos">n.</span>
+      <div class="meaning">幸福（感）、健康、ウェルビーイング</div>
+      <div class="example">Exercise improves mental well-being.（運動は精神的な幸福感を向上させる）</div>
+    </div>
+    <div class="vocab-item">
+      <span class="vocab-word">emerge</span><span class="pos">v.</span>
+      <div class="meaning">現れる、出現する、（新たに）生まれる</div>
+      <div class="example">A new trend has emerged in the market.（市場に新しい流行が現れた）</div>
+    </div>
+    <div class="vocab-item">
+      <span class="vocab-word">niche</span><span class="pos">n.</span>
+      <div class="meaning">隙間市場、特化した分野</div>
+      <div class="example">They found a profitable niche in organic food.（彼らは有機食品で利益の出るニッチを見つけた）</div>
+    </div>
+    <div class="vocab-item">
+      <span class="vocab-word">thrive</span><span class="pos">v.</span>
+      <div class="meaning">繁栄する、栄える、成功する</div>
+      <div class="example">Small businesses thrive in this city.（この街では中小企業が栄えている）</div>
+    </div>
+    <div class="vocab-item">
+      <span class="vocab-word">enthusiast</span><span class="pos">n.</span>
+      <div class="meaning">熱狂的な愛好家、ファン</div>
+      <div class="example">He's a sauna enthusiast.（彼はサウナ愛好家だ）</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="a2-expr">
+    <div class="expr-item">
+      <span class="vocab-word">gain popularity</span>
+      <div class="meaning">人気を得る、人気が高まる</div>
+      <div class="example">Electric cars are gaining popularity.（電気自動車は人気が高まっている）</div>
+    </div>
+    <div class="expr-item">
+      <span class="vocab-word">be projected to ~</span>
+      <div class="meaning">〜すると予測されている（= be expected to）</div>
+      <div class="example">The economy is projected to grow 2% this year.（経済は今年2%成長すると予測されている）</div>
+    </div>
+    <div class="expr-item">
+      <span class="vocab-word">account for ~</span>
+      <div class="meaning">〜を占める（割合）／〜を説明する</div>
+      <div class="example">Asia accounts for 60% of global sales.（アジアは世界売上の60％を占める）</div>
+    </div>
+    <div class="expr-item">
+      <span class="vocab-word">prioritize A over B</span>
+      <div class="meaning">BよりAを優先する</div>
+      <div class="example">He prioritizes quality over speed.（彼はスピードより品質を優先する）</div>
+    </div>
+  </div>
+</div>
+
+<!-- Article 3: Gadget / Lifehack -->
+<div class="article">
+  <div class="article-head">
+    <span class="category">Gadget · Lifehack</span>
+    <h2>IKEA's $10 Bluetooth Speaker Shakes Up the Audio Market</h2>
+    <span style="display:block; color:var(--muted); font-size:14px; margin-top:4px;">IKEAの10ドルBluetoothスピーカーが音響市場に衝撃</span>
+    <div class="source">Source: <a href="https://www.gearpatrol.com/tech/best-new-tech-releases-ces-2026/" target="_blank">Gear Patrol — CES 2026 Tech Releases</a></div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="a3-read">📖 Read</div>
+    <div class="tab" data-tab="a3-vocab">📚 Vocab</div>
+    <div class="tab" data-tab="a3-expr">💡 Expressions</div>
+  </div>
+
+  <div class="legend">
+    <span><span class="legend-box" style="background:var(--highlight);"></span>重要単語</span>
+    <span><span class="legend-box" style="background:#d7ebd8;"></span>重要表現</span>
+  </div>
+
+  <div class="tab-content active" id="a3-read">
+    <div class="passage">
+      IKEA has <span class="word" data-def="発表した、公開した">unveiled</span> a surprising new product at CES 2026: the Kallsup Bluetooth speaker, priced at just $10 per unit. Despite its incredibly low cost, the speaker offers a clever feature that <span class="expr" data-def="〜と差別化する／〜と区別する">sets it apart from</span> competitors — the ability to <span class="word" data-def="数珠つなぎにする">daisy-chain</span> multiple units together to form a wireless speaker array. Users can connect several Kallsup speakers wirelessly, enabling them to play <span class="word" data-def="同期された">synchronized</span> audio throughout multiple rooms without investing in expensive smart home systems. This approach makes high-quality, multi-room sound accessible to <span class="expr" data-def="予算を意識する消費者">budget-conscious consumers</span>. The device features a compact, minimalist design that <span class="expr" data-def="〜と合致している">aligns with</span> IKEA's signature Scandinavian aesthetic. While audio <span class="word" data-def="純粋主義者、こだわりの強い人">purists</span> may point out its modest sound specifications, reviewers highlight its exceptional <span class="expr" data-def="価値提案（コスパの良さ）">value proposition</span> and creative connectivity. Industry observers note that IKEA's entry into affordable audio tech could <span class="word" data-def="混乱させる、破壊的変革を起こす">disrupt</span> the market and pressure established brands to lower prices.
+    </div>
+  </div>
+
+  <div class="tab-content" id="a3-vocab">
+    <div class="vocab-item">
+      <span class="vocab-word">unveil</span><span class="pos">v.</span>
+      <div class="meaning">（新製品・計画を）発表する、公開する</div>
+      <div class="example">Apple unveiled its new iPhone yesterday.（Appleは昨日、新型iPhoneを発表した）</div>
+    </div>
+    <div class="vocab-item">
+      <span class="vocab-word">daisy-chain</span><span class="pos">v.</span>
+      <div class="meaning">複数の機器を数珠つなぎに接続する</div>
+      <div class="example">You can daisy-chain up to 10 monitors.（最大10台のモニターを数珠つなぎにできる）</div>
+    </div>
+    <div class="vocab-item">
+      <span class="vocab-word">synchronized</span><span class="pos">adj.</span>
+      <div class="meaning">同期された、タイミングの合った</div>
+      <div class="example">The speakers play synchronized music.（スピーカーは同期した音楽を再生する）</div>
+    </div>
+    <div class="vocab-item">
+      <span class="vocab-word">disrupt</span><span class="pos">v.</span>
+      <div class="meaning">（市場・業界を）混乱させる、破壊的変革を起こす</div>
+      <div class="example">Streaming services disrupted the TV industry.（ストリーミングサービスがテレビ業界を破壊的に変えた）</div>
+    </div>
+    <div class="vocab-item">
+      <span class="vocab-word">purist</span><span class="pos">n.</span>
+      <div class="meaning">純粋主義者、原理主義的なこだわりを持つ人</div>
+      <div class="example">Coffee purists prefer simple espresso.（コーヒーのこだわり派はシンプルなエスプレッソを好む）</div>
+    </div>
+    <div class="vocab-item">
+      <span class="vocab-word">modest</span><span class="pos">adj.</span>
+      <div class="meaning">控えめな、ささやかな／謙虚な</div>
+      <div class="example">The company showed modest growth.（その会社は控えめな成長を示した）</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="a3-expr">
+    <div class="expr-item">
+      <span class="vocab-word">set A apart from B</span>
+      <div class="meaning">AをBと差別化する、際立たせる</div>
+      <div class="example">Its design sets it apart from rivals.（そのデザインは競合との差別化になっている）</div>
+    </div>
+    <div class="expr-item">
+      <span class="vocab-word">value proposition</span>
+      <div class="meaning">価値提案。顧客にとっての「買う理由／コスパの良さ」を指すビジネス用語</div>
+      <div class="example">Tesla's value proposition is performance plus sustainability.（テスラの価値提案は性能と持続可能性の両立）</div>
+    </div>
+    <div class="expr-item">
+      <span class="vocab-word">align with ~</span>
+      <div class="meaning">〜と一致する、合致する、方向性を揃える</div>
+      <div class="example">Our strategy aligns with customer needs.（当社の戦略は顧客ニーズと合致している）</div>
+    </div>
+    <div class="expr-item">
+      <span class="vocab-word">budget-conscious</span>
+      <div class="meaning">予算を意識する、コスパ重視の</div>
+      <div class="example">Budget-conscious shoppers look for deals.（予算重視の買い物客はお得品を探す）</div>
+    </div>
+    <div class="expr-item">
+      <span class="vocab-word">point out</span>
+      <div class="meaning">指摘する（= indicate）</div>
+      <div class="example">She pointed out a mistake in the report.（彼女はレポートの誤りを指摘した）</div>
+    </div>
+  </div>
+</div>
+
+<div class="refresh-note">
+  💡 明日もこのページで新しい記事を読みたい場合は、「今日のニュースを更新して」とチャットで伝えてください。
+</div>
+
+<footer>
+  Daily English News · Powered by Claude · TOEIC 800 Level Learning
+</footer>
+
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const tabId = tab.dataset.tab;
+      const article = tab.closest('.article');
+      article.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      article.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    });
+  });
+
+  // Tooltip for highlighted words
+  const tooltip = document.getElementById('tooltip');
+  document.querySelectorAll('.word, .expr').forEach(el => {
+    el.addEventListener('mouseenter', (e) => {
+      tooltip.textContent = el.dataset.def;
+      tooltip.style.display = 'block';
+      const rect = el.getBoundingClientRect();
+      tooltip.style.left = (rect.left + window.scrollX) + 'px';
+      tooltip.style.top = (rect.bottom + window.scrollY + 6) + 'px';
+    });
+    el.addEventListener('mouseleave', () => {
+      tooltip.style.display = 'none';
+    });
+    // Mobile tap support
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      tooltip.textContent = el.dataset.def;
+      tooltip.style.display = 'block';
+      const rect = el.getBoundingClientRect();
+      tooltip.style.left = (rect.left + window.scrollX) + 'px';
+      tooltip.style.top = (rect.bottom + window.scrollY + 6) + 'px';
+    });
+  });
+  document.addEventListener('click', () => { tooltip.style.display = 'none'; });
+
+  // Set today's date dynamically (so if user opens later, it still looks fresh)
+  const today = new Date();
+  const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+  const dateStr = `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日（${weekdays[today.getDay()]}）`;
+  const dateEl = document.getElementById('today-date');
+  if (dateEl) dateEl.textContent = dateStr;
+</script>
+
+</body>
+</html>
