@@ -8,18 +8,17 @@
 毎朝 06:01 ──── Claude が最新ニュースを取得 → index.html を更新 → git commit
 毎朝 06:15 ──── Mac の launchd が自動で git push
             ──── GitHub Pages が即時反映
-            ──── iPhone Safari で https://<あなた>.github.io/<リポジトリ名>/ を開く
+            ──── iPhone Safari で https://ht1927.github.io/daily-english-news/ を開く
 ```
+
+**あなたのサイトURL（セットアップ完了後に有効になります）：**
+## 👉 https://ht1927.github.io/daily-english-news/
 
 ---
 
-## ステップ 1：GitHub アカウントを作成
+## ステップ 1：GitHub アカウント確認 ✅
 
-1. ブラウザで https://github.com/signup を開く
-2. メールアドレス、パスワード、ユーザー名を入力してアカウント作成
-3. メール認証を完了
-
-> 💡 **ユーザー名はURLになります**。例：ユーザー名が `hideki27` なら、サイトのURLは `https://hideki27.github.io/daily-english-news/` になります。
+GitHubアカウント `ht1927` は確認済みです。ステップ2から始めてください。
 
 ## ステップ 2：Mac に GitHub CLI（`gh`）をインストール
 
@@ -79,7 +78,7 @@ gh api -X POST /repos/$(gh api user --jq .login)/daily-english-news/pages \
 gh api /repos/$(gh api user --jq .login)/daily-english-news/pages --jq .html_url
 ```
 
-> 出力例：`https://hideki27.github.io/daily-english-news/`
+> 出力例：`https://ht1927.github.io/daily-english-news/`
 >
 > このURLをiPhoneのSafariで開いてブックマーク追加・ホーム画面に追加すると毎朝チェックしやすくなります。
 
