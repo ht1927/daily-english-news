@@ -912,7 +912,8 @@ const getArchive = () => JSON.parse(localStorage.getItem(ARCH_KEY) || '{}');
 
 function saveToArchive() {
   const arch = getArchive();
-  if (arch[dateKey]) return; // already saved today
+  // Skip only if already saved in the new format (has passageHTML)
+  if (arch[dateKey] && arch[dateKey].articles && arch[dateKey].articles[0] && arch[dateKey].articles[0].passageHTML) return;
   const articles = [...document.querySelectorAll('.article')].map((a, i) => {
     const artId = 'a' + (i + 1);
     return {
@@ -1050,10 +1051,10 @@ function openArchiveArticle(dKey, artIdx) {
         <button class="tts-btn" onclick="toggleArchTTS(this,'${readId}')">▶ 読み上げ</button>
         <span class="tts-label">ネイティブ発音で音読練習</span>
       </div>
-      <div class="passage">${art.passageHTML || ''}</div>
+      <div class="passage">${art.passageHTML || escHtml(art.passage || '')}</div>
     </div>
     <div class="arch-detail-tab-content" id="${jaId}">
-      <div class="ja-passage">${escHtml(art.jaPassage || '')}</div>
+      <div class="ja-passage">${escHtml(art.jaPassage || art.passage || '')}</div>
     </div>
     <div class="arch-detail-tab-content" id="${vocabId}">${vocabHTML}</div>
     <div class="arch-detail-tab-content" id="${exprId}">${exprHTML}</div>
