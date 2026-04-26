@@ -31,7 +31,7 @@
   .source a { color: var(--muted); text-decoration: underline; }
 
   .tabs { display: flex; border-bottom: 1px solid var(--border); background: #faf8f3; overflow-x: auto; }
-  .tab { flex: 1; padding: 11px 4px; text-align: center; cursor: pointer; font-size: 11px; font-weight: 600; color: var(--muted); border-bottom: 3px solid transparent; transition: all 0.2s; user-select: none; white-space: nowrap; min-width: 56px; }
+  .tab { flex: 1; padding: 11px 4px; text-align: center; cursor: pointer; font-size: 11px; font-weight: 600; color: var(--muted); border-bottom: 3px solid transparent; transition: all 0.2s; user-select: none; white-space: nowrap; min-width: 52px; }
   .tab:hover { background: rgba(0,0,0,0.02); }
   .tab.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--card); }
   .tab-content { display: none; padding: 20px 24px; }
@@ -81,23 +81,20 @@
   .archive-day.open .archive-chevron { transform: rotate(180deg); }
   .archive-day-body { display: none; padding: 0 18px 16px; }
   .archive-day.open .archive-day-body { display: block; }
-  .archive-article { border-left: 3px solid var(--border); padding: 8px 12px; margin-top: 10px; border-radius: 0 6px 6px 0; }
-  .archive-article-cat { font-size: 11px; color: var(--accent); font-weight: 700; text-transform: uppercase; }
-  .archive-article-title { font-size: 14px; font-weight: 600; margin-top: 2px; }
-  .archive-article-ja { font-size: 13px; color: var(--muted); }
-  .archive-article-summary { font-size: 13px; margin-top: 4px; line-height: 1.6; color: var(--text); }
 
   /* FAB */
   .fab-wrap { position: fixed; bottom: 20px; right: 16px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; z-index: 200; }
   .fab { background: var(--favorite); color: white; border: none; border-radius: 28px; padding: 11px 16px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.22); transition: transform 0.2s; display: flex; align-items: center; gap: 6px; }
   .fab:hover { transform: scale(1.05); }
   .fab-archive { background: var(--blue); }
+  .fab-quiz-btn { background: #2e7d32; }
   .fab-count { background: var(--accent); color: white; border-radius: 10px; padding: 1px 7px; font-size: 11px; font-weight: 700; }
 
   /* Modal */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.52); z-index: 300; align-items: flex-start; justify-content: center; padding: 20px; overflow-y: auto; }
   .modal-overlay.open { display: flex; }
   .modal { background: white; border-radius: 16px; width: 100%; max-width: 600px; margin: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.3); overflow: hidden; }
+  .modal-wide { max-width: 720px; }
   .modal-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: #faf8f3; }
   .modal-title { font-size: 17px; font-weight: 700; }
   .modal-close { background: none; border: none; cursor: pointer; font-size: 22px; color: var(--muted); line-height: 1; padding: 4px 8px; }
@@ -112,15 +109,77 @@
   .fav-meta { font-size: 11px; color: var(--muted); margin-top: 6px; }
   .fav-remove { position: absolute; top: 8px; right: 10px; background: none; border: none; cursor: pointer; color: #ccc; font-size: 16px; }
   .fav-remove:hover { color: var(--accent); }
+  .fav-mastery { margin-top: 6px; }
 
   footer { text-align: center; padding: 40px 0 20px; color: var(--muted); font-size: 12px; }
   .refresh-note { background: var(--accent-soft); border-radius: 10px; padding: 14px 18px; margin-top: 20px; font-size: 13px; color: var(--accent); text-align: center; }
   .tooltip { position: absolute; background: #333; color: white; padding: 8px 12px; border-radius: 6px; font-size: 13px; max-width: 260px; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.3); pointer-events: none; display: none; }
 
+  /* ── Quiz ── */
+  .quiz-progress { font-size: 12px; color: var(--muted); margin-bottom: 12px; font-weight: 600; }
+  .quiz-question { font-size: 15px; font-weight: 600; margin-bottom: 16px; line-height: 1.6; padding: 14px; background: var(--accent-soft); border-radius: 10px; }
+  .quiz-qnum { color: var(--accent); }
+  .quiz-choices { list-style: none; }
+  .quiz-choice { padding: 11px 16px; border: 1.5px solid var(--border); border-radius: 8px; margin-bottom: 8px; cursor: pointer; font-size: 14px; transition: all 0.15s; line-height: 1.5; }
+  .quiz-choice:hover:not(.disabled) { border-color: var(--accent); background: var(--accent-soft); }
+  .quiz-choice.correct { background: #d7ebd8 !important; border-color: var(--success) !important; color: #1e5c38; font-weight: 600; }
+  .quiz-choice.wrong { background: #fde8e8 !important; border-color: #c0392b !important; color: #a93226; }
+  .quiz-choice.disabled { cursor: default; pointer-events: none; }
+  .quiz-explanation { font-size: 13px; color: #444; margin-top: 10px; padding: 10px 14px; background: #f0f4ff; border-radius: 8px; border-left: 3px solid var(--blue); display: none; line-height: 1.6; }
+  .quiz-explanation.show { display: block; }
+  .quiz-next { margin-top: 14px; background: var(--blue); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; display: none; }
+  .quiz-next.show { display: inline-block; }
+  .quiz-result-box { background: linear-gradient(135deg, var(--accent-soft), #fff9f5); border: 2px solid var(--accent); border-radius: 14px; padding: 24px; text-align: center; }
+  .quiz-score-big { font-size: 52px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .quiz-score-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .quiz-score-bar { height: 10px; background: #e0e0e0; border-radius: 5px; margin: 16px auto; max-width: 240px; }
+  .quiz-score-fill { height: 100%; border-radius: 5px; background: var(--success); }
+  .quiz-score-msg { font-size: 16px; font-weight: 600; margin: 12px 0; }
+  .quiz-restart-btn { background: var(--accent); color: white; border: none; border-radius: 8px; padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+  /* ── Mastery Badges ── */
+  .mastery-badge { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .mastery-0 { background: #eee; color: #888; }
+  .mastery-1 { background: #fde8e8; color: #c0392b; }
+  .mastery-2 { background: #fef3e2; color: #e67e22; }
+  .mastery-3 { background: #fef9c3; color: #9a7d0a; }
+  .mastery-4 { background: #d7ebd8; color: #27ae60; }
+
+  /* ── Vocab Quiz ── */
+  .vquiz-progress { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+  .vquiz-dot { width: 13px; height: 13px; border-radius: 50%; background: #ddd; }
+  .vquiz-dot.correct { background: var(--success); }
+  .vquiz-dot.wrong { background: #c0392b; }
+  .vquiz-dot.current { background: var(--blue); box-shadow: 0 0 0 3px rgba(61,90,138,0.25); }
+  .vquiz-word { font-size: 28px; font-weight: 700; font-family: Georgia, serif; color: var(--accent); text-align: center; padding: 12px 0 4px; }
+  .vquiz-pos { font-size: 13px; color: var(--muted); text-align: center; margin-bottom: 4px; font-style: italic; }
+  .vquiz-prompt { font-size: 14px; text-align: center; color: var(--muted); margin-bottom: 16px; }
+  .vquiz-mastery-legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 16px; }
+  .vquiz-result-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+
+  /* ── Archive List Items ── */
+  .arch-list-item { border-left: 3px solid var(--border); padding: 10px 14px; margin-top: 10px; border-radius: 0 8px 8px 0; cursor: pointer; transition: all 0.15s; background: #fcfbf7; }
+  .arch-list-item:hover { background: var(--accent-soft); border-left-color: var(--accent); }
+  .arch-list-cat { font-size: 11px; color: var(--accent); font-weight: 700; text-transform: uppercase; }
+  .arch-list-title { font-size: 14px; font-weight: 600; margin-top: 2px; }
+  .arch-list-ja { font-size: 13px; color: var(--muted); margin-top: 1px; }
+  .arch-open-hint { font-size: 11px; color: var(--blue); margin-top: 4px; }
+
+  /* ── Archive Detail Modal ── */
+  .arch-detail-body { max-height: 80vh; overflow-y: auto; }
+  .arch-detail-head { padding: 16px 20px 12px; background: linear-gradient(to right, var(--accent-soft), transparent); border-bottom: 1px solid var(--border); }
+  .arch-detail-tabs { display: flex; border-bottom: 1px solid var(--border); background: #faf8f3; overflow-x: auto; }
+  .arch-detail-tab { flex: 1; padding: 11px 4px; text-align: center; cursor: pointer; font-size: 11px; font-weight: 600; color: var(--muted); border-bottom: 3px solid transparent; transition: all 0.2s; user-select: none; white-space: nowrap; min-width: 52px; }
+  .arch-detail-tab:hover { background: rgba(0,0,0,0.02); }
+  .arch-detail-tab.active { color: var(--accent); border-bottom-color: var(--accent); background: white; }
+  .arch-detail-tab-content { display: none; padding: 20px; }
+  .arch-detail-tab-content.active { display: block; }
+
   @media (max-width: 500px) {
     h1 { font-size: 22px; } .article h2 { font-size: 17px; } .passage { font-size: 15px; }
-    .tab { font-size: 10px; padding: 10px 3px; } .tab-content { padding: 16px 14px; }
+    .tab { font-size: 10px; padding: 10px 2px; min-width: 46px; } .tab-content { padding: 16px 14px; }
     .article-head { padding: 16px 16px 12px; } .fab { font-size: 13px; padding: 10px 13px; }
+    .arch-detail-tab { font-size: 10px; padding: 10px 2px; min-width: 46px; }
   }
 </style>
 </head>
@@ -150,6 +209,7 @@
     <div class="tab" data-tab="a1-ja">🇯🇵 日本語</div>
     <div class="tab" data-tab="a1-vocab">📚 Vocab</div>
     <div class="tab" data-tab="a1-expr">💡 表現</div>
+    <div class="tab" data-tab="a1-quiz">📝 クイズ</div>
   </div>
   <div class="legend">
     <span><span class="legend-box" style="background:var(--highlight);"></span>重要単語</span>
@@ -231,6 +291,7 @@
       <div class="example">Activists are calling for stronger regulations.（活動家たちはより厳しい規制を求めている）</div>
     </div>
   </div>
+  <div class="tab-content" id="a1-quiz"></div>
 </div>
 
 <!-- Article 2 -->
@@ -246,6 +307,7 @@
     <div class="tab" data-tab="a2-ja">🇯🇵 日本語</div>
     <div class="tab" data-tab="a2-vocab">📚 Vocab</div>
     <div class="tab" data-tab="a2-expr">💡 表現</div>
+    <div class="tab" data-tab="a2-quiz">📝 クイズ</div>
   </div>
   <div class="legend">
     <span><span class="legend-box" style="background:var(--highlight);"></span>重要単語</span>
@@ -327,6 +389,7 @@
       <div class="example">Rising costs are weighing on household budgets.（コスト上昇が家計を圧迫している）</div>
     </div>
   </div>
+  <div class="tab-content" id="a2-quiz"></div>
 </div>
 
 <!-- Article 3 -->
@@ -342,6 +405,7 @@
     <div class="tab" data-tab="a3-ja">🇯🇵 日本語</div>
     <div class="tab" data-tab="a3-vocab">📚 Vocab</div>
     <div class="tab" data-tab="a3-expr">💡 表現</div>
+    <div class="tab" data-tab="a3-quiz">📝 クイズ</div>
   </div>
   <div class="legend">
     <span><span class="legend-box" style="background:var(--highlight);"></span>重要単語</span>
@@ -429,6 +493,7 @@
       <div class="example">This finding is relevant for building engineers.（この知見は建築エンジニアに関連性が高い）</div>
     </div>
   </div>
+  <div class="tab-content" id="a3-quiz"></div>
 </div>
 
 <!-- Archive Section -->
@@ -439,13 +504,14 @@
   </div>
 </div>
 
-<div class="refresh-note">💡 毎朝6:00頃に自動更新されます。翌朝、最新記事をお楽しみください。</div>
+<div class="refresh-note">💡 毎朝自動更新されます。翌朝、最新記事をお楽しみください。</div>
 <footer>Daily English News · Powered by Claude · TOEIC 800 Level Learning</footer>
 
 </div>
 
 <!-- FABs -->
 <div class="fab-wrap">
+  <button class="fab fab-quiz-btn" onclick="openVocabQuiz()">🧠 単語クイズ</button>
   <button class="fab fab-archive" onclick="openArchiveModal()">📚 バックナンバー</button>
   <button class="fab" onclick="openFavModal()">★ お気に入り <span class="fab-count" id="fav-count">0</span></button>
 </div>
@@ -455,26 +521,133 @@
   <div class="modal">
     <div class="modal-header">
       <span class="modal-title">★ お気に入りリスト</span>
-      <button class="modal-close" onclick="document.getElementById('fav-modal').classList.remove('open')">✕</button>
+      <button class="modal-close" onclick="closeModal('fav-modal')">✕</button>
     </div>
     <div class="modal-body" id="fav-modal-body"></div>
   </div>
 </div>
 
-<!-- Archive Modal -->
+<!-- Archive List Modal -->
 <div class="modal-overlay" id="archive-modal">
   <div class="modal">
     <div class="modal-header">
       <span class="modal-title">📚 バックナンバー</span>
-      <button class="modal-close" onclick="document.getElementById('archive-modal').classList.remove('open')">✕</button>
+      <button class="modal-close" onclick="closeModal('archive-modal')">✕</button>
     </div>
     <div class="modal-body" id="archive-modal-body"></div>
+  </div>
+</div>
+
+<!-- Archive Article Detail Modal -->
+<div class="modal-overlay" id="arch-detail-modal">
+  <div class="modal modal-wide">
+    <div class="modal-header">
+      <span class="modal-title" id="arch-detail-date">📅</span>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button style="background:none;border:none;cursor:pointer;font-size:13px;color:var(--blue);font-weight:600;padding:4px 8px" onclick="closeModal('arch-detail-modal');openArchiveModal()">← 一覧へ</button>
+        <button class="modal-close" onclick="closeModal('arch-detail-modal')">✕</button>
+      </div>
+    </div>
+    <div class="arch-detail-body" id="arch-detail-content"></div>
+  </div>
+</div>
+
+<!-- Vocab Quiz Modal -->
+<div class="modal-overlay" id="vquiz-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">🧠 単語クイズ</span>
+      <button class="modal-close" onclick="closeModal('vquiz-modal')">✕</button>
+    </div>
+    <div class="modal-body" id="vquiz-body"></div>
   </div>
 </div>
 
 <div class="tooltip" id="tooltip"></div>
 
 <script>
+// ── Quiz Data ─────────────────────────────────────────────
+window.quizData = {
+  a1: [
+    {
+      q: "What are the names of DeepSeek's new flagship AI models?",
+      choices: ["V3 Ultra and V3 Mini", "V4 Flash and V4 Pro", "V5 Pro and V5 Ultra", "Pro Max and Ultra Max"],
+      ans: 1,
+      exp: "記事より：DeepSeek unveiled its newest flagship models, V4 Flash and V4 Pro."
+    },
+    {
+      q: "What does the \"Hybrid Attention Architecture\" improve?",
+      choices: ["Image recognition speed", "Power consumption of AI chips", "AI's ability to retain context across long conversations", "Translation accuracy between languages"],
+      ans: 2,
+      exp: "記事より：A key innovation is the Hybrid Attention Architecture, which improves an AI system's ability to retain context across long conversations."
+    },
+    {
+      q: "What is notable about how DeepSeek developed its models?",
+      choices: ["They required massive hardware investment", "They were co-developed with U.S. companies", "They were built at a fraction of the cost of comparable Western AI", "They used only publicly available data"],
+      ans: 2,
+      exp: "記事より：DeepSeek's models are notable for being developed at a fraction of the cost of comparable Western AI systems."
+    },
+    {
+      q: "What are U.S. lawmakers calling for in response to DeepSeek's release?",
+      choices: ["Banning all Chinese AI products", "Creating a joint AI research fund with China", "Stronger export controls on AI-related chips", "Reducing domestic AI budgets"],
+      ans: 2,
+      exp: "記事より：U.S. lawmakers are already calling for stronger export controls on AI-related chips."
+    }
+  ],
+  a2: [
+    {
+      q: "According to the IMF, what will global growth slow to in 2026?",
+      choices: ["2.5 percent", "3.1 percent", "3.8 percent", "4.2 percent"],
+      ans: 1,
+      exp: "記事より：Global growth is set to slow to 3.1 percent this year."
+    },
+    {
+      q: "What event has primarily pushed up commodity prices, particularly oil?",
+      choices: ["A global shipping crisis", "U.S. trade tariffs", "Climate change policies", "Ongoing conflict in the Middle East"],
+      ans: 3,
+      exp: "記事より：The war [in the Middle East] has pushed up commodity prices, particularly oil."
+    },
+    {
+      q: "Which markets are described as \"particularly vulnerable\"?",
+      choices: ["European markets", "U.S. markets", "Emerging markets", "Asian markets"],
+      ans: 2,
+      exp: "記事より：Emerging markets are particularly vulnerable, as rising interest rates in developed nations draw capital away."
+    },
+    {
+      q: "What difficult challenge do central banks face?",
+      choices: ["Between saving and investment", "Between exchange rates and interest rates", "Between combating inflation and supporting growth", "Between trade deficits and surpluses"],
+      ans: 2,
+      exp: "記事より：Central banks face a difficult balancing act between combating inflation and supporting growth."
+    }
+  ],
+  a3: [
+    {
+      q: "What do disinfectants do to plastic pipes over time?",
+      choices: ["Make them stronger and more durable", "Seal tiny cracks automatically", "Increase water flow capacity", "Oxidize and degrade them, causing heavy metal accumulation"],
+      ans: 3,
+      exp: "記事より：Disinfectants can oxidize and degrade plastic pipes over time, causing them to accumulate heavy metal particles."
+    },
+    {
+      q: "Why were lead pipes replaced with plastic pipes?",
+      choices: ["Lead pipes were too expensive to manufacture", "Lead pipes had documented health risks", "Lead pipes could not withstand water pressure", "Lead pipes caused water discoloration"],
+      ans: 1,
+      exp: "記事より：Lead pipes were phased out due to documented health risks."
+    },
+    {
+      q: "Which type of pipes does the study focus on?",
+      choices: ["Steel-reinforced pipes", "Copper-lined pipes", "PVC or polyethylene piping", "Fiberglass pipes"],
+      ans: 2,
+      exp: "記事より：The findings are particularly relevant for homes using PVC or polyethylene piping."
+    },
+    {
+      q: "What do experts say the findings underscore?",
+      choices: ["That plastic pipes are completely safe", "The need to return to lead pipes", "That disinfectants should be banned from water treatment", "The need to revisit pipe material standards and update infrastructure guidelines"],
+      ans: 3,
+      exp: "記事より：Experts say the findings underscore the need to revisit pipe material standards and update water infrastructure guidelines."
+    }
+  ]
+};
+
 // ── Tabs ──────────────────────────────────────────────────
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
@@ -483,23 +656,35 @@ document.querySelectorAll('.tab').forEach(tab => {
     art.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     art.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     tab.classList.add('active');
-    document.getElementById(id).classList.add('active');
+    const content = document.getElementById(id);
+    content.classList.add('active');
+    // Lazy-render quiz tab
+    if (id.endsWith('-quiz') && !content.dataset.rendered) {
+      const artId = id.replace('-quiz', '');
+      renderQuizInContainer(id, window.quizData[artId]);
+      content.dataset.rendered = '1';
+    }
   });
 });
 
 // ── Tooltip ───────────────────────────────────────────────
 const tooltip = document.getElementById('tooltip');
+function showTooltip(el) {
+  tooltip.textContent = el.dataset.def;
+  tooltip.style.display = 'block';
+  const r = el.getBoundingClientRect();
+  tooltip.style.left = (r.left + window.scrollX) + 'px';
+  tooltip.style.top = (r.bottom + window.scrollY + 6) + 'px';
+}
 document.querySelectorAll('.word,.expr').forEach(el => {
-  const show = () => {
-    tooltip.textContent = el.dataset.def;
-    tooltip.style.display = 'block';
-    const r = el.getBoundingClientRect();
-    tooltip.style.left = (r.left + window.scrollX) + 'px';
-    tooltip.style.top = (r.bottom + window.scrollY + 6) + 'px';
-  };
-  el.addEventListener('mouseenter', show);
+  el.addEventListener('mouseenter', () => showTooltip(el));
   el.addEventListener('mouseleave', () => tooltip.style.display = 'none');
-  el.addEventListener('click', e => { e.stopPropagation(); show(); });
+  el.addEventListener('click', e => { e.stopPropagation(); showTooltip(el); });
+});
+// Tooltip delegation for dynamically rendered archive passages
+document.getElementById('arch-detail-content').addEventListener('click', e => {
+  const el = e.target.closest('.word,.expr');
+  if (el && el.dataset.def) { e.stopPropagation(); showTooltip(el); }
 });
 document.addEventListener('click', () => tooltip.style.display = 'none');
 
@@ -508,20 +693,19 @@ const now = new Date();
 const wd = ['日','月','火','水','木','金','土'];
 const todayLabel = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日（${wd[now.getDay()]}）`;
 const dateKey = now.toISOString().slice(0,10);
-const el = document.getElementById('today-date');
-if (el) el.textContent = todayLabel;
+const dateEl = document.getElementById('today-date');
+if (dateEl) dateEl.textContent = todayLabel;
 
 // ── TTS ───────────────────────────────────────────────────
 let activeBtn = null;
-function toggleTTS(btn, tabId) {
+function doTTS(btn, text) {
   const synth = window.speechSynthesis;
   if (!synth) { alert('このブラウザは音声読み上げに対応していません。'); return; }
   if (activeBtn === btn && synth.speaking) {
     synth.cancel(); btn.textContent = '▶ 読み上げ'; btn.classList.remove('playing'); activeBtn = null; return;
   }
-  if (synth.speaking) { synth.cancel(); }
+  if (synth.speaking) synth.cancel();
   if (activeBtn) { activeBtn.textContent = '▶ 読み上げ'; activeBtn.classList.remove('playing'); }
-  const text = document.getElementById(tabId)?.querySelector('.passage')?.textContent?.trim();
   if (!text) return;
   const utt = new SpeechSynthesisUtterance(text);
   utt.lang = 'en-US'; utt.rate = 0.92; utt.pitch = 1.0;
@@ -532,7 +716,38 @@ function toggleTTS(btn, tabId) {
   activeBtn = btn; btn.textContent = '⏸ 停止'; btn.classList.add('playing');
   synth.speak(utt);
 }
+function toggleTTS(btn, tabId) {
+  const text = document.getElementById(tabId)?.querySelector('.passage')?.textContent?.trim();
+  doTTS(btn, text);
+}
+function toggleArchTTS(btn, containerId) {
+  const text = document.getElementById(containerId)?.querySelector('.passage')?.textContent?.trim();
+  doTTS(btn, text);
+}
 if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => {};
+
+// ── Mastery ───────────────────────────────────────────────
+const MASTERY_KEY = 'daily_en_mastery_v1';
+const getMastery = () => JSON.parse(localStorage.getItem(MASTERY_KEY) || '{}');
+const saveMastery = m => localStorage.setItem(MASTERY_KEY, JSON.stringify(m));
+const MASTERY_LABELS = ['未学習', '学習中', '覚えかけ', '定着中', '習得済み'];
+
+function getMasteryLevel(word) {
+  const m = getMastery()[word];
+  if (!m || m.total === 0) return 0;
+  const pct = m.correct / m.total;
+  if (pct >= 0.9) return 4;
+  if (pct >= 0.7) return 3;
+  if (pct >= 0.4) return 2;
+  return 1;
+}
+
+function masteryBadgeHTML(word) {
+  const level = getMasteryLevel(word);
+  const m = getMastery()[word];
+  const stat = m && m.total > 0 ? ` (${m.correct}/${m.total})` : '';
+  return `<span class="mastery-badge mastery-${level}">${MASTERY_LABELS[level]}${stat}</span>`;
+}
 
 // ── Favorites ─────────────────────────────────────────────
 const FAV_KEY = 'daily_en_favs_v2';
@@ -544,7 +759,10 @@ function toggleFav(btn) {
   const item = btn.closest('[data-word]');
   if (!item) return;
   const { word, type='vocab', meaning='', example='', pos='' } = item.dataset;
-  const articleTitle = item.closest('.article')?.querySelector('h2')?.textContent || '';
+  const articleTitle = item.closest('.article')?.querySelector('h2')?.textContent
+    || item.closest('.arch-detail-content')?.querySelector('h2')?.textContent
+    || item.closest('#arch-detail-content')?.querySelector('h2')?.textContent
+    || '';
   let favs = getFavs();
   const idx = favs.findIndex(f => f.word === word && f.date === dateKey);
   if (idx >= 0) {
@@ -568,11 +786,12 @@ function openFavModal() {
       `<div style="font-size:12px;color:var(--muted);margin:14px 0 8px;font-weight:600;">📅 ${d}</div>` +
       byDate[d].map(f => `
         <div class="fav-list-item type-${f.type}">
-          <button class="fav-remove" onclick="removeFav('${f.word}','${f.date}',this)">✕</button>
-          <div class="fav-word">${f.word}${f.pos?`<span style="font-size:12px;color:var(--muted);font-family:sans-serif;font-weight:normal;margin-left:6px">${f.pos}</span>`:''}</div>
-          <div class="fav-meaning">${f.meaning}</div>
-          <div class="fav-example">${f.example}</div>
-          <div class="fav-meta">📰 ${f.article}</div>
+          <button class="fav-remove" onclick="removeFav('${CSS.escape(f.word)}','${f.date}',this)">✕</button>
+          <div class="fav-word">${escHtml(f.word)}${f.pos?`<span style="font-size:12px;color:var(--muted);font-family:sans-serif;font-weight:normal;margin-left:6px">${escHtml(f.pos)}</span>`:''}</div>
+          <div class="fav-meaning">${escHtml(f.meaning)}</div>
+          <div class="fav-example">${escHtml(f.example)}</div>
+          <div class="fav-mastery">${masteryBadgeHTML(f.word)}</div>
+          <div class="fav-meta">📰 ${escHtml(f.article)}</div>
         </div>`).join('')
     ).join('');
   }
@@ -584,19 +803,107 @@ function removeFav(word, date, btn) {
   favs = favs.filter(f => !(f.word === word && f.date === date));
   saveFavs(favs);
   btn.closest('.fav-list-item').remove();
-  document.querySelectorAll(`[data-word="${word}"] .fav-btn`).forEach(b => { b.textContent = '☆'; b.classList.remove('active'); });
+  document.querySelectorAll(`[data-word="${CSS.escape(word)}"] .fav-btn`).forEach(b => { b.textContent = '☆'; b.classList.remove('active'); });
   if (!getFavs().length) document.getElementById('fav-modal-body').innerHTML = '<div class="modal-empty">まだお気に入りがありません。</div>';
 }
 
 function restoreFavState() {
-  const todayFavs = getFavs().filter(f => f.date === dateKey).map(f => f.word);
+  const allFavWords = getFavs().map(f => f.word);
   document.querySelectorAll('[data-word]').forEach(item => {
-    if (todayFavs.includes(item.dataset.word)) {
+    if (allFavWords.includes(item.dataset.word)) {
       const b = item.querySelector('.fav-btn');
       if (b) { b.textContent = '★'; b.classList.add('active'); }
     }
   });
   updateFavCount();
+}
+
+// ── Quiz Engine ────────────────────────────────────────────
+const allQuizState = {};
+
+function renderQuizInContainer(cid, qs) {
+  const container = document.getElementById(cid);
+  if (!container) return;
+  if (!qs || !qs.length) {
+    container.innerHTML = '<p style="color:var(--muted);padding:20px;text-align:center;">クイズデータがありません。</p>';
+    return;
+  }
+  allQuizState[cid] = { qIdx: 0, answers: [], answered: false, qs };
+  _renderQuizQ(cid);
+}
+
+function _renderQuizQ(cid) {
+  const container = document.getElementById(cid);
+  if (!container) return;
+  const state = allQuizState[cid];
+  const { qIdx, qs } = state;
+  if (qIdx >= qs.length) { _renderQuizResult(cid); return; }
+  const q = qs[qIdx];
+  container.innerHTML = `
+    <div style="padding:4px 0 0">
+      <div class="quiz-progress">問題 ${qIdx + 1} / ${qs.length}</div>
+      <div class="quiz-question"><span class="quiz-qnum">Q${qIdx+1}. </span>${escHtml(q.q)}</div>
+      <ul class="quiz-choices">
+        ${q.choices.map((c, i) => `<li class="quiz-choice" onclick="answerQ('${cid}',${i})">${escHtml(c)}</li>`).join('')}
+      </ul>
+      <div class="quiz-explanation" id="${cid}-exp">💡 ${escHtml(q.exp || '')}</div>
+      <button class="quiz-next" id="${cid}-next" onclick="nextQ('${cid}')">次の問題 →</button>
+    </div>`;
+}
+
+function answerQ(cid, choiceIdx) {
+  const state = allQuizState[cid];
+  if (!state || state.answered) return;
+  state.answered = true;
+  const q = state.qs[state.qIdx];
+  const container = document.getElementById(cid);
+  const choices = container.querySelectorAll('.quiz-choice');
+  choices.forEach(c => c.classList.add('disabled'));
+  if (choiceIdx === q.ans) {
+    choices[choiceIdx].classList.add('correct');
+    state.answers.push(true);
+  } else {
+    choices[choiceIdx].classList.add('wrong');
+    choices[q.ans].classList.add('correct');
+    state.answers.push(false);
+  }
+  const exp = document.getElementById(cid + '-exp');
+  if (exp) exp.classList.add('show');
+  const next = document.getElementById(cid + '-next');
+  if (next) next.classList.add('show');
+}
+
+function nextQ(cid) {
+  const state = allQuizState[cid];
+  if (!state) return;
+  state.qIdx++;
+  state.answered = false;
+  _renderQuizQ(cid);
+}
+
+function _renderQuizResult(cid) {
+  const container = document.getElementById(cid);
+  if (!container) return;
+  const state = allQuizState[cid];
+  const correct = state.answers.filter(Boolean).length;
+  const total = state.qs.length;
+  const pct = Math.round(correct / total * 100);
+  const msg = pct === 100 ? '🎉 完璧です！全問正解！' : pct >= 75 ? '👏 よくできました！' : pct >= 50 ? '📖 本文をもう一度読んで復習しましょう' : '💪 本文を読み直してもう一度チャレンジ！';
+  container.innerHTML = `
+    <div class="quiz-result-box" style="margin:4px 0">
+      <div class="quiz-score-big">${correct}/${total}</div>
+      <div class="quiz-score-label">正解数</div>
+      <div class="quiz-score-bar"><div class="quiz-score-fill" style="width:${pct}%"></div></div>
+      <div class="quiz-score-msg">${msg}</div>
+      <button class="quiz-restart-btn" onclick="restartQuiz('${cid}')">もう一度 🔄</button>
+    </div>`;
+}
+
+function restartQuiz(cid) {
+  const state = allQuizState[cid];
+  if (!state) return;
+  state.qIdx = 0; state.answers = []; state.answered = false;
+  _renderQuizQ(cid);
 }
 
 // ── Archive ───────────────────────────────────────────────
@@ -605,14 +912,29 @@ const getArchive = () => JSON.parse(localStorage.getItem(ARCH_KEY) || '{}');
 
 function saveToArchive() {
   const arch = getArchive();
-  if (arch[dateKey]) return;
-  const articles = [...document.querySelectorAll('.article')].map(a => ({
-    category: a.querySelector('.category')?.textContent.trim() || '',
-    title: a.querySelector('h2')?.textContent.trim() || '',
-    titleJa: a.querySelector('.title-ja')?.textContent.trim() || '',
-    passage: (a.querySelector('.passage')?.textContent.trim() || '').slice(0, 350),
-    source: a.querySelector('.source a')?.textContent.trim() || ''
-  }));
+  if (arch[dateKey]) return; // already saved today
+  const articles = [...document.querySelectorAll('.article')].map((a, i) => {
+    const artId = 'a' + (i + 1);
+    return {
+      category: a.querySelector('.category')?.textContent.trim() || '',
+      title: a.querySelector('h2')?.textContent.trim() || '',
+      titleJa: a.querySelector('.title-ja')?.textContent.trim() || '',
+      source: a.querySelector('.source a')?.textContent.trim() || '',
+      sourceUrl: a.querySelector('.source a')?.href || '',
+      passageHTML: a.querySelector('.passage')?.innerHTML.trim() || '',
+      jaPassage: a.querySelector('.ja-passage')?.textContent.trim() || '',
+      vocab: [...a.querySelectorAll(`#${artId}-vocab .vocab-item`)].map(v => ({
+        word: v.dataset.word || '', pos: v.dataset.pos || '',
+        meaning: v.dataset.meaning || '', example: v.dataset.example || '',
+        type: v.dataset.type || 'vocab'
+      })),
+      expr: [...a.querySelectorAll(`#${artId}-expr .expr-item`)].map(e => ({
+        word: e.dataset.word || '', meaning: e.dataset.meaning || '',
+        example: e.dataset.example || '', type: 'expr'
+      })),
+      quizData: (window.quizData && window.quizData[artId]) ? window.quizData[artId] : []
+    };
+  });
   arch[dateKey] = { dateLabel: todayLabel, articles };
   localStorage.setItem(ARCH_KEY, JSON.stringify(arch));
 }
@@ -621,7 +943,10 @@ function renderArchiveSection() {
   const arch = getArchive();
   const past = Object.keys(arch).filter(d => d !== dateKey).sort().reverse();
   const listEl = document.getElementById('archive-list');
-  if (!past.length) { listEl.innerHTML = '<div style="color:var(--muted);font-size:14px;text-align:center;padding:20px;">過去の記事はここに蓄積されます。毎日ページを訪れると記事が保存されます。</div>'; return; }
+  if (!past.length) {
+    listEl.innerHTML = '<div style="color:var(--muted);font-size:14px;text-align:center;padding:20px;">過去の記事はここに蓄積されます。毎日ページを訪れると記事が保存されます。</div>';
+    return;
+  }
   listEl.innerHTML = past.map(d => {
     const e = arch[d];
     return `<div class="archive-day" id="arch-${d}">
@@ -630,12 +955,12 @@ function renderArchiveSection() {
         <span style="font-size:12px;color:var(--muted)">${e.articles.length}記事 <span class="archive-chevron">▼</span></span>
       </div>
       <div class="archive-day-body">
-        ${e.articles.map(a => `
-          <div class="archive-article">
-            <div class="archive-article-cat">${a.category}</div>
-            <div class="archive-article-title">${a.title}</div>
-            <div class="archive-article-ja">${a.titleJa}</div>
-            <div class="archive-article-summary">${a.passage}…</div>
+        ${e.articles.map((a, i) => `
+          <div class="arch-list-item" onclick="openArchiveArticle('${d}',${i})">
+            <div class="arch-list-cat">${escHtml(a.category)}</div>
+            <div class="arch-list-title">${escHtml(a.title)}</div>
+            <div class="arch-list-ja">${escHtml(a.titleJa)}</div>
+            <div class="arch-open-hint">▶ タップして全文・クイズを見る</div>
           </div>`).join('')}
       </div>
     </div>`;
@@ -655,20 +980,239 @@ function openArchiveModal() {
   } else {
     body.innerHTML = dates.map(d => {
       const e = arch[d];
-      return `<div style="font-weight:700;font-size:15px;margin:16px 0 10px">📅 ${e.dateLabel || d}</div>` +
-        e.articles.map(a => `
-          <div style="border-left:3px solid var(--border);padding:8px 12px;margin-bottom:10px;border-radius:0 6px 6px 0">
-            <div style="font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase">${a.category}</div>
-            <div style="font-size:14px;font-weight:600;margin-top:2px">${a.title}</div>
-            <div style="font-size:13px;color:var(--muted)">${a.titleJa}</div>
-            <div style="font-size:13px;margin-top:6px;line-height:1.6">${a.passage}…</div>
+      return `<div style="font-weight:700;font-size:15px;margin:16px 0 10px">📅 ${escHtml(e.dateLabel || d)}</div>` +
+        e.articles.map((a, i) => `
+          <div class="arch-list-item" onclick="openArchiveArticle('${d}',${i})">
+            <div class="arch-list-cat">${escHtml(a.category)}</div>
+            <div class="arch-list-title">${escHtml(a.title)}</div>
+            <div class="arch-list-ja">${escHtml(a.titleJa)}</div>
+            <div class="arch-open-hint">▶ タップして全文・クイズを見る</div>
           </div>`).join('');
     }).join('');
   }
   document.getElementById('archive-modal').classList.add('open');
 }
 
-document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); }));
+function openArchiveArticle(dKey, artIdx) {
+  const arch = getArchive();
+  const day = arch[dKey];
+  if (!day) return;
+  const art = day.articles[artIdx];
+  if (!art) return;
+  // Close archive list, open detail
+  closeModal('archive-modal');
+  const prefix = `arch-${dKey}-a${artIdx}`;
+  const readId = `${prefix}-read`;
+  const jaId = `${prefix}-ja`;
+  const vocabId = `${prefix}-vocab`;
+  const exprId = `${prefix}-expr`;
+  const quizId = `${prefix}-quiz`;
+
+  // Build vocab HTML
+  const allFavWords = getFavs().map(f => f.word);
+  const vocabHTML = (art.vocab || []).map(v => {
+    const isFav = allFavWords.includes(v.word);
+    return `<div class="vocab-item" data-word="${escAttr(v.word)}" data-pos="${escAttr(v.pos)}" data-meaning="${escAttr(v.meaning)}" data-example="${escAttr(v.example)}" data-type="${v.type||'vocab'}">
+      <button class="fav-btn${isFav?' active':''}" onclick="toggleFav(this)">${isFav?'★':'☆'}</button>
+      <span class="vocab-word">${escHtml(v.word)}</span><span class="pos">${escHtml(v.pos)}</span>
+      <div class="meaning">${escHtml(v.meaning)}</div>
+      <div class="example">${escHtml(v.example)}</div>
+    </div>`;
+  }).join('') || '<p style="color:var(--muted);padding:10px;">データがありません</p>';
+
+  const exprHTML = (art.expr || []).map(e => {
+    const isFav = allFavWords.includes(e.word);
+    return `<div class="expr-item" data-word="${escAttr(e.word)}" data-meaning="${escAttr(e.meaning)}" data-example="${escAttr(e.example)}" data-type="expr">
+      <button class="fav-btn${isFav?' active':''}" onclick="toggleFav(this)">${isFav?'★':'☆'}</button>
+      <span class="vocab-word">${escHtml(e.word)}</span>
+      <div class="meaning">${escHtml(e.meaning)}</div>
+      <div class="example">${escHtml(e.example)}</div>
+    </div>`;
+  }).join('') || '<p style="color:var(--muted);padding:10px;">データがありません</p>';
+
+  document.getElementById('arch-detail-date').textContent = `📅 ${escHtml(day.dateLabel || dKey)}`;
+  document.getElementById('arch-detail-content').innerHTML = `
+    <div class="arch-detail-head">
+      <span class="category">${escHtml(art.category)}</span>
+      <h2 style="font-size:18px;font-weight:700;line-height:1.4;margin-top:4px">${escHtml(art.title)}</h2>
+      <span class="title-ja">${escHtml(art.titleJa)}</span>
+      ${art.source ? `<div class="source">${escHtml(art.source)}</div>` : ''}
+    </div>
+    <div class="arch-detail-tabs">
+      <div class="arch-detail-tab active" onclick="switchArchTab(this,'${readId}')">📖 Read</div>
+      <div class="arch-detail-tab" onclick="switchArchTab(this,'${jaId}')">🇯🇵 日本語</div>
+      <div class="arch-detail-tab" onclick="switchArchTab(this,'${vocabId}')">📚 Vocab</div>
+      <div class="arch-detail-tab" onclick="switchArchTab(this,'${exprId}')">💡 表現</div>
+      <div class="arch-detail-tab" onclick="switchArchTab(this,'${quizId}')">📝 クイズ</div>
+    </div>
+    <div class="arch-detail-tab-content active" id="${readId}">
+      <div class="tts-bar">
+        <button class="tts-btn" onclick="toggleArchTTS(this,'${readId}')">▶ 読み上げ</button>
+        <span class="tts-label">ネイティブ発音で音読練習</span>
+      </div>
+      <div class="passage">${art.passageHTML || ''}</div>
+    </div>
+    <div class="arch-detail-tab-content" id="${jaId}">
+      <div class="ja-passage">${escHtml(art.jaPassage || '')}</div>
+    </div>
+    <div class="arch-detail-tab-content" id="${vocabId}">${vocabHTML}</div>
+    <div class="arch-detail-tab-content" id="${exprId}">${exprHTML}</div>
+    <div class="arch-detail-tab-content" id="${quizId}"></div>`;
+
+  // Render quiz for archive article
+  renderQuizInContainer(quizId, art.quizData || []);
+
+  document.getElementById('arch-detail-modal').classList.add('open');
+}
+
+function switchArchTab(el, tabId) {
+  const modal = document.getElementById('arch-detail-modal');
+  modal.querySelectorAll('.arch-detail-tab').forEach(t => t.classList.remove('active'));
+  modal.querySelectorAll('.arch-detail-tab-content').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  const tc = document.getElementById(tabId);
+  if (tc) tc.classList.add('active');
+}
+
+// ── Vocab Quiz ─────────────────────────────────────────────
+const FALLBACK_MEANINGS = [
+  "増加する、拡大する", "減少する、縮小する", "提案する、提唱する",
+  "分析する、調査する", "解決する、対処する", "影響する、作用する",
+  "承認する、認可する", "革新的な、先進的な", "持続可能な、継続可能な",
+  "一時的な、短期間の", "競争する、争う", "協力する、連携する",
+  "抑制する、制限する", "促進する、推進する", "評価する、見積もる",
+  "変換する、転換する", "強化する、増強する", "維持する、保持する",
+  "反映する、示す", "確立する、設立する", "比較する、対照する"
+];
+
+let vquizSession = null;
+
+function openVocabQuiz() {
+  const favs = getFavs();
+  const body = document.getElementById('vquiz-body');
+  if (favs.length < 1) {
+    body.innerHTML = '<div class="modal-empty">お気に入りがまだありません。<br>単語・表現の ☆ をタップして<br>まずお気に入り登録しましょう。</div>';
+    document.getElementById('vquiz-modal').classList.add('open');
+    return;
+  }
+  // Deduplicate by word
+  const seen = new Set();
+  const unique = [];
+  for (const f of favs) { if (!seen.has(f.word)) { seen.add(f.word); unique.push(f); } }
+  // Shuffle, take up to 10
+  const items = [...unique].sort(() => Math.random() - 0.5).slice(0, 10);
+  const allMeanings = unique.map(f => f.meaning);
+
+  const quizItems = items.map(f => {
+    const others = allMeanings.filter(m => m !== f.meaning).sort(() => Math.random() - 0.5);
+    const distractors = others.slice(0, 3);
+    while (distractors.length < 3) {
+      const fb = FALLBACK_MEANINGS[Math.floor(Math.random() * FALLBACK_MEANINGS.length)];
+      if (!distractors.includes(fb) && fb !== f.meaning) distractors.push(fb);
+    }
+    const choices = [...distractors, f.meaning].sort(() => Math.random() - 0.5);
+    return { word: f.word, pos: f.pos || '', meaning: f.meaning, choices, ans: choices.indexOf(f.meaning) };
+  });
+
+  vquizSession = { items: quizItems, qIdx: 0, answers: [] };
+  renderVQuizQ();
+  document.getElementById('vquiz-modal').classList.add('open');
+}
+
+function renderVQuizQ() {
+  const body = document.getElementById('vquiz-body');
+  const { items, qIdx, answers } = vquizSession;
+  if (qIdx >= items.length) { renderVQuizResult(); return; }
+  const item = items[qIdx];
+  const dots = items.map((_, i) => {
+    let cls = 'vquiz-dot';
+    if (i < answers.length) cls += answers[i] ? ' correct' : ' wrong';
+    else if (i === qIdx) cls += ' current';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+  body.innerHTML = `
+    <div class="vquiz-progress">${dots}</div>
+    <div class="vquiz-word">${escHtml(item.word)}</div>
+    <div class="vquiz-pos">${item.pos ? escHtml(item.pos) : '&nbsp;'}</div>
+    <div class="vquiz-prompt">この単語・表現の意味は？</div>
+    <ul class="quiz-choices">
+      ${item.choices.map((c, i) => `<li class="quiz-choice" onclick="answerVQuiz(${i})">${escHtml(c)}</li>`).join('')}
+    </ul>
+    <button class="quiz-next" id="vquiz-next-btn" onclick="advanceVQuiz()">次へ →</button>`;
+}
+
+function answerVQuiz(choiceIdx) {
+  const { items, qIdx } = vquizSession;
+  const item = items[qIdx];
+  const body = document.getElementById('vquiz-body');
+  const choices = body.querySelectorAll('.quiz-choice');
+  choices.forEach(c => c.classList.add('disabled'));
+  const correct = choiceIdx === item.ans;
+  choices[choiceIdx].classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) choices[item.ans].classList.add('correct');
+  vquizSession.answers.push(correct);
+  // Update mastery immediately
+  const mastery = getMastery();
+  if (!mastery[item.word]) mastery[item.word] = { correct: 0, total: 0 };
+  mastery[item.word].total++;
+  if (correct) mastery[item.word].correct++;
+  saveMastery(mastery);
+  // Show next button
+  const nextBtn = document.getElementById('vquiz-next-btn');
+  if (nextBtn) nextBtn.classList.add('show');
+}
+
+function advanceVQuiz() {
+  vquizSession.qIdx++;
+  renderVQuizQ();
+}
+
+function renderVQuizResult() {
+  const body = document.getElementById('vquiz-body');
+  const { items, answers } = vquizSession;
+  const correct = answers.filter(Boolean).length;
+  const total = items.length;
+  const pct = Math.round(correct / total * 100);
+  const msg = pct === 100 ? '🎉 完璧です！全問正解！' : pct >= 80 ? '👏 すばらしい！' : pct >= 60 ? '📖 もう少しで完璧！' : '💪 継続は力なり！';
+  const rows = items.map((item, i) => {
+    const level = getMasteryLevel(item.word);
+    const m = getMastery()[item.word];
+    const pctStr = m && m.total > 0 ? Math.round(m.correct / m.total * 100) + '%' : '0%';
+    return `<div class="vquiz-result-row">
+      <span>${answers[i] ? '✅' : '❌'} <strong>${escHtml(item.word)}</strong></span>
+      <span class="mastery-badge mastery-${level}">${MASTERY_LABELS[level]} ${pctStr}</span>
+    </div>`;
+  }).join('');
+  body.innerHTML = `
+    <div style="text-align:center;padding-bottom:20px;border-bottom:1px solid var(--border);margin-bottom:16px">
+      <div class="quiz-score-big">${correct}/${total}</div>
+      <div class="quiz-score-label">正解数</div>
+      <div class="quiz-score-bar"><div class="quiz-score-fill" style="width:${pct}%"></div></div>
+      <div class="quiz-score-msg">${msg}</div>
+      <button class="quiz-restart-btn" style="margin-top:10px" onclick="openVocabQuiz()">もう一度 🔄</button>
+    </div>
+    <h3 style="font-size:14px;font-weight:700;margin-bottom:12px;">📊 単語の定着度</h3>
+    ${rows}
+    <div class="vquiz-mastery-legend" style="margin-top:16px">
+      ${MASTERY_LABELS.map((l, i) => `<span class="mastery-badge mastery-${i}">${l}</span>`).join('')}
+    </div>`;
+}
+
+// ── Utilities ─────────────────────────────────────────────
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function escAttr(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function closeModal(id) {
+  document.getElementById(id)?.classList.remove('open');
+}
+
+// Close modals on backdrop click
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
 
 // ── Init ──────────────────────────────────────────────────
 saveToArchive();
