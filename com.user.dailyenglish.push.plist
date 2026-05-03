@@ -9,16 +9,12 @@
     <array>
         <string>/bin/bash</string>
         <string>-lc</string>
-        <string>cd "$HOME/Claude/English news app" &amp;&amp; /usr/bin/git add -A &amp;&amp; (/usr/bin/git diff --cached --quiet || /usr/bin/git commit -m "Daily auto-update $(/bin/date '+%Y-%m-%d')") &amp;&amp; /usr/bin/git push origin main</string>
+        <string>cd "$HOME/Claude/English news app" &amp;&amp; /usr/bin/git add -A &amp;&amp; (/usr/bin/git diff --cached --quiet || /usr/bin/git commit -m "Daily auto-update $(/bin/date '+%Y-%m-%d')") &amp;&amp; (/usr/bin/git log origin/main..HEAD --oneline | /usr/bin/grep -q . &amp;&amp; /usr/bin/git push origin main || true)</string>
     </array>
 
-    <key>StartCalendarInterval</key>
-    <dict>
-        <key>Hour</key>
-        <integer>20</integer>
-        <key>Minute</key>
-        <integer>0</integer>
-    </dict>
+    <!-- 3600秒(1時間)ごとに実行。スリープ中に時刻を過ぎた場合は起動直後に自動実行 -->
+    <key>StartInterval</key>
+    <integer>3600</integer>
 
     <key>StandardOutPath</key>
     <string>/tmp/dailyenglish-push.log</string>
